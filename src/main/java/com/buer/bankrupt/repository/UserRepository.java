@@ -35,7 +35,7 @@ public class UserRepository {
         try(PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH))) {
             pw.println("name,account,pin,saldo");
             for (User u: users) {
-                pw.printf("%s,%s,%s,%.0f%n", u.getName(), u.getAccount(), u.getPin(), u.getSaldo());
+                pw.printf("%s,%s,%s,%.0f%n", u.name(), u.account(), u.pin(), u.saldo());
             }
         } catch (IOException ex) {
             System.err.println("Gagal menyimpan file" + ex.getMessage());

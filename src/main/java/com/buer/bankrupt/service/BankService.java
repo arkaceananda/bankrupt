@@ -12,10 +12,10 @@ public class BankService {
         this.userRepository = userRepository;
     }
 
-    public boolean logic(String account, String pin) {
+    public boolean login(String account, String pin) {
         List<User> users = userRepository.findAll();
         for (User u : users) {
-            if (u.getAccount().equals(account) && u.getPin().equals(pin)) {
+            if (u.account().equals(account) && u.pin().equals(pin)) {
                 this.currentUser = u;
                 return true;
             }
@@ -25,30 +25,34 @@ public class BankService {
 
     public boolean transfer(String norekDest, double amount) {
         List<User> users = userRepository.findAll();
-        if (currentUser == null || amount > currentUser.getSaldo() || amount <= 0) {
+        if (currentUser == null || amount > currentUser.saldo() || amount <= 0) {
             return false;
         }
 
         User targetUser = null;
         for (User u : users) {
-            if (u.getAccount().equals(norekDest)) {
+            if (u.account().equals(norekDest)) {
                 targetUser = u;
                 break;
             }
         }
 
-        if (targetUser != null && !targetUser.getAccount().equals(currentUser.getAccount())) {
-            for (User u : users) {
-                if (u.getAccount().equals(currentUser.getAccount())) {
-                    u.setSaldo(u.getSaldo() - amount);
+        if (targetUser != null && !targetUser.account().equals(currentUser.account())) {
+            for (int i = 0; i < users.size(); i++) {
+                User u = users.get(i);
+
+                if (u.account().equals(currentUser.account())) {
+                    User updateSender = new User(u.name(), u.account(), u.pin(), u.saldo() - amount);
+                    users.set(i, updateSender);
                 }
-                if (u.getAccount().equals(targetUser.getAccount())) {
-                    u.setSaldo(u.getSaldo() + amount);
+                if (u.account().equals(targetUser.account())) {
+                    User updatedTarget = new User(u.name(), u.account(), u.pin(), u.saldo() + amount);
+                    users.set(i, updatedTarget);
                 }
             }
 
             userRepository.saveAll(users);
-            currentUser.setSaldo(currentUser.getSaldo() - amount);
+            currentUser = new User(currentUser.name(), currentUser.account(), currentUser.pin(), currentUser.saldo() -amount);
             return true;
         }
         return false;
