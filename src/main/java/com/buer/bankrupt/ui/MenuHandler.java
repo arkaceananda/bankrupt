@@ -1,6 +1,5 @@
 package com.buer.bankrupt.ui;
 
-import com.buer.bankrupt.model.User;
 import com.buer.bankrupt.repository.UserRepository;
 import com.buer.bankrupt.service.BankService;
 import java.util.Scanner;
@@ -46,7 +45,7 @@ public class MenuHandler {
                         }
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    System.err.println(e.getMessage());
                 }
             }
         }
@@ -60,7 +59,7 @@ public class MenuHandler {
         String pin = scanner.nextLine().trim();
 
         if (service.login(account, pin)) {
-            System.out.println("Login successfull! Welcome " + service.getCurrentUser().getName());
+            System.out.println("Login successfull! Welcome " + service.getCurrentUser().name());
             showMainMenu();
         } else {
             System.err.println("[ERROR!] Login failed! Check your account number and PIN.");
@@ -71,17 +70,17 @@ public class MenuHandler {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Enter your name: ");
             String name = scanner.nextLine().trim();
-            if (name == null || name.isBlank()) {
+            if (name.isBlank()) {
                 System.err.println("[!!] Name cannot be null.");
             }
             System.out.println("Enter your account number");
             String account = scanner.nextLine().trim();
-            if (account == null || account.isBlank()) {
+            if (account.isBlank()) {
                 System.err.println("[!ERROR] Account number cannot be null");
             }
             System.out.println("Enter your pin: ");
             String pin = scanner.nextLine().trim();
-            if (pin == null || pin.isBlank()) {
+            if (pin.isBlank()) {
                 System.err.println("[!ERROR] Pin cannot be null");
             }
         }
